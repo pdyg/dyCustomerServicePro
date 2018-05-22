@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd    
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd    
+            http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd    
+            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+
+	<!-- 对web包中的所有类进行扫描，以完成Bean创建和自动依赖注入的功能 通过annotation使用spring的配置 -->
+	<context:component-scan base-package="com.pdy.controller" />
+
+
+	<!-- 避免IE执行AJAX时,返回JSON出现下载文件  jackson配置 -->
+<!-- 	<bean id="mappingJacksonHttpMessageConverter"
+		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				<value>text/html;charset=UTF-8</value>
+			</list>
+		</property>
+	</bean> -->
+	
+	<!-- 避免IE执行AJAX时,返回JSON出现下载文件 -->
+            <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter"
+                  id="fastJsonHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>application/json;charset=UTF-8</value>
+                    </list>
+                </property>
+                <!--<property name="serializerFeature">-->
+                <!--这个地方加上这个功能吧，能自己配置一些东西，比如时间的格式化，null输出""等等-->
+                <!--</property>-->
+            </bean>
+
+
+	<mvc:annotation-driven />  <!-- 支持spring3.0新的mvc注解 -->
+	<mvc:annotation-driven /><!-- 注释驱动 -->
+
+
+	
+
+	<!-- springmvc使用视图设置 -->
+	<bean id="jspViewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/jsp/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+
+	<!-- SpringMVC上传文件时，需要配置MultipartResolver处理器 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="UTF-8" />
+		<!-- 指定所上传文件的总大小不能超过10485760000B。注意maxUploadSize属性的限制不是针对单个文件，而是所有文件的容量之和 -->
+		<property name="maxUploadSize" value="10485760000"></property>
+		<property name="maxInMemorySize" value="40960"></property>
+
+	</bean>
+
+	<!-- 资源文件处理 -->
+	<mvc:resources location="/js/" mapping="/css/**" />
+	<mvc:resources location="/images/" mapping="/images/**" />
+	<mvc:resources location="/css/" mapping="/css/**" />
+
+	<!-- <mvc:interceptors> <mvc:interceptor> <mvc:mapping path="/**" /> <bean 
+		class="com.pdy.controller.login.WindowsInterceptor"></bean> </mvc:interceptor> 
+		</mvc:interceptors> -->
+		
+		
+		
+
+</beans>

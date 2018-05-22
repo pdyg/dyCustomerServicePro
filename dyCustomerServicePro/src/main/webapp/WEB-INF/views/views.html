@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<!--类似include  -->
+<head th:replace="@{../../css.html}">
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<!--内嵌js  -->
+<script th:inline="javascript" type="text/javascript">
+var yy=[[${TK}]];//获取resq的值
+
+</script>
+<body>
+	<h2 th:text>尊敬的会员你好${TK}</h2>
+	 <span th:text="${TK}" ></span> 
+</body>
+</html>
